@@ -4,6 +4,29 @@ A Ruby CLI tool for posting to Micro.blog and X (Twitter) simultaneously.
 
 ## Installation
 
+### Pre-built Packages
+
+**Debian/Ubuntu (.deb)**
+```bash
+wget https://github.com/timappledotcom/sendit-cli/releases/download/v1.0.0/sendit-cli_1.0.0_amd64.deb
+sudo dpkg -i sendit-cli_1.0.0_amd64.deb
+sudo bundle install --system
+```
+
+**Arch Linux (.pkg.tar.zst)**
+```bash
+wget https://github.com/timappledotcom/sendit-cli/releases/download/v1.0.0/sendit-cli-1.0.0-1-x86_64.pkg.tar.zst
+sudo pacman -U sendit-cli-1.0.0-1-x86_64.pkg.tar.zst
+```
+
+**From Tarball (All Linux distros)**
+```bash
+wget https://github.com/timappledotcom/sendit-cli/releases/download/v1.0.0/sendit-cli-1.0.0-linux-x86_64.tar.gz
+tar -xzf sendit-cli-1.0.0-linux-x86_64.tar.gz
+cd sendit-cli-1.0.0-linux-x86_64
+./install.sh
+```
+
 ### From Source
 
 1. Clone this repository
