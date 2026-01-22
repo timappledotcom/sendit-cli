@@ -19,6 +19,13 @@ wget https://github.com/timappledotcom/sendit-cli/releases/download/v1.0.0/sendi
 sudo pacman -U sendit-cli-1.0.0-1-x86_64.pkg.tar.zst
 ```
 
+**Fedora/RHEL/Rocky Linux (.rpm)**
+```bash
+wget https://github.com/timappledotcom/sendit-cli/releases/download/v1.0.0/sendit-cli-1.0.0-1.el9.x86_64.rpm
+sudo dnf install sendit-cli-1.0.0-1.el9.x86_64.rpm
+sudo bundle install --system
+```
+
 **From Tarball (All Linux distros)**
 ```bash
 wget https://github.com/timappledotcom/sendit-cli/releases/download/v1.0.0/sendit-cli-1.0.0-linux-x86_64.tar.gz
