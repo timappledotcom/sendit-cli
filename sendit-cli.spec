@@ -1,18 +1,16 @@
 Name:           sendit-cli
-Version:        1.0.1
+Version:        1.0.2
 Release:        1%{?dist}
 Summary:        CLI tool for posting to Micro.blog and X simultaneously
 
 License:        MIT
 URL:            https://github.com/timappledotcom/sendit-cli
-Source0:        sendit-cli-1.0.1-linux-x86_64.tar.gz
+Source0:        sendit-cli-1.0.2-linux-x86_64.tar.gz
 
 Requires:       ruby >= 2.7
-Requires:       rubygem-oauth >= 1.1
-Requires:       rubygem-tty-prompt >= 0.23
-Requires:       rubygem-tty-spinner >= 0.9
-Requires:       rubygem-tty-box >= 0.7
-Requires:       rubygem-typhoeus >= 1.4
+
+%post
+gem install --no-document tty-prompt tty-spinner tty-box oauth typhoeus
 
 %description
 SendIt CLI is a Ruby command-line tool that allows you to post messages
@@ -36,6 +34,9 @@ sed -i "s|require_relative '../lib/scli'|require '/usr/local/lib/scli/scli'|" %{
 /usr/local/lib/scli/*
 
 %changelog
+* Tue Jan 27 2026 SendIt CLI <noreply@example.com> - 1.0.2-1
+- Fix: Use post-install script for all packages to install gems
+
 * Mon Jan 27 2026 SendIt CLI <noreply@example.com> - 1.0.1-1
 - Fix: Add Ruby gem dependencies to package requirements
 

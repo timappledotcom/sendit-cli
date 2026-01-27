@@ -1,3 +1,49 @@
+# SendIt CLI v1.0.2
+
+## What's New
+
+- Fix: Ruby gems now installed via post-install script (fixes dependency errors on Debian/Ubuntu)
+
+## Installation
+
+### Debian/Ubuntu (.deb)
+```bash
+wget https://github.com/timappledotcom/sendit-cli/releases/download/v1.0.2/sendit-cli_1.0.2_amd64.deb
+sudo dpkg -i sendit-cli_1.0.2_amd64.deb
+```
+
+### Arch Linux (.pkg.tar.zst)
+```bash
+wget https://github.com/timappledotcom/sendit-cli/releases/download/v1.0.2/sendit-cli-1.0.2-1-x86_64.pkg.tar.zst
+sudo pacman -U sendit-cli-1.0.2-1-x86_64.pkg.tar.zst
+```
+
+### Fedora/RHEL/Rocky Linux (.rpm)
+```bash
+wget https://github.com/timappledotcom/sendit-cli/releases/download/v1.0.2/sendit-cli-1.0.2-1.el9.x86_64.rpm
+sudo dnf install sendit-cli-1.0.2-1.el9.x86_64.rpm
+```
+
+### From Source (.tar.gz)
+```bash
+wget https://github.com/timappledotcom/sendit-cli/releases/download/v1.0.2/sendit-cli-1.0.2-linux-x86_64.tar.gz
+tar -xzf sendit-cli-1.0.2-linux-x86_64.tar.gz
+cd sendit-cli-1.0.2-linux-x86_64
+./install.sh
+```
+
+## Usage
+
+```bash
+scli "Your message here"
+```
+
+## Full Changelog
+
+https://github.com/timappledotcom/sendit-cli/compare/v1.0.1...v1.0.2
+
+---
+
 # SendIt CLI v1.0.1
 
 ## What's New

@@ -60,17 +60,13 @@ chmod +x pkg/usr/local/bin/scli
 ### 3. Build Debian Package
 
 ```bash
-fpm -s dir -t deb -n sendit-cli -v 1.0.1 \
+fpm -s dir -t deb -n sendit-cli -v 1.0.2 \
   --description "CLI tool for posting to Micro.blog and X simultaneously" \
   --url "https://github.com/timappledotcom/sendit-cli" \
   --maintainer "SendIt CLI <noreply@example.com>" \
   --license MIT \
   --depends ruby \
-  --depends ruby-oauth \
-  --depends ruby-tty-prompt \
-  --depends ruby-tty-spinner \
-  --depends ruby-tty-box \
-  --depends ruby-typhoeus \
+  --after-install scripts/post-install.sh \
   --deb-no-default-config-files \
   -C pkg \
   usr/local/bin/scli usr/local/lib/scli
@@ -92,7 +88,7 @@ chmod +x scripts/post-install.sh
 ### 5. Build Arch Package
 
 ```bash
-fpm -s dir -t pacman -n sendit-cli -v 1.0.1 \
+fpm -s dir -t pacman -n sendit-cli -v 1.0.2 \
   --description "CLI tool for posting to Micro.blog and X simultaneously" \
   --url "https://github.com/timappledotcom/sendit-cli" \
   --maintainer "SendIt CLI <noreply@example.com>" \
@@ -109,7 +105,7 @@ fpm -s dir -t pacman -n sendit-cli -v 1.0.1 \
 First, create the tarball:
 
 ```bash
-tar -czf sendit-cli-1.0.1-linux-x86_64.tar.gz bin lib Gemfile README.md LICENSE install.sh
+tar -czf sendit-cli-1.0.2-linux-x86_64.tar.gz bin lib Gemfile README.md LICENSE install.sh
 ```
 
 Then build with Docker:
@@ -118,7 +114,7 @@ Then build with Docker:
 docker run --rm -v $(pwd):/workspace -w /workspace rockylinux:9 bash -c "
   dnf install -y rpm-build rpmdevtools &&
   mkdir -p ~/rpmbuild/{BUILD,RPMS,SOURCES,SPECS,SRPMS} &&
-  cp sendit-cli-1.0.1-linux-x86_64.tar.gz ~/rpmbuild/SOURCES/ &&
+  cp sendit-cli-1.0.2-linux-x86_64.tar.gz ~/rpmbuild/SOURCES/ &&
   cp sendit-cli.spec ~/rpmbuild/SPECS/ &&
   rpmbuild -ba ~/rpmbuild/SPECS/sendit-cli.spec &&
   cp ~/rpmbuild/RPMS/x86_64/*.rpm /workspace/
@@ -129,7 +125,7 @@ docker run --rm -v $(pwd):/workspace -w /workspace rockylinux:9 bash -c "
 
 ```bash
 chmod +x install.sh
-tar -czf sendit-cli-1.0.1-linux-x86_64.tar.gz bin lib Gemfile README.md LICENSE install.sh
+tar -czf sendit-cli-1.0.2-linux-x86_64.tar.gz bin lib Gemfile README.md LICENSE install.sh
 ```
 
 ## Verification
@@ -138,19 +134,19 @@ After building packages, verify they work:
 
 ### Test Debian Package
 ```bash
-dpkg -c sendit-cli_1.0.1_amd64.deb
+dpkg -c sendit-cli_1.0.2_amd64.deb
 ```
 
 ### Test Arch Package
 ```bash
-tar -tzf sendit-cli-1.0.1-1-x86_64.pkg.tar.zst
+tar -tzf sendit-cli-1.0.2-1-x86_64.pkg.tar.zst
 # Check the executable:
-tar -xOf sendit-cli-1.0.1-1-x86_64.pkg.tar.zst usr/local/bin/scli | head -10
+tar -xOf sendit-cli-1.0.2-1-x86_64.pkg.tar.zst usr/local/bin/scli | head -10
 ```
 
 ### Test RPM Package
 ```bash
-rpm -qlp sendit-cli-1.0.1-1.el9.x86_64.rpm
+rpm -qlp sendit-cli-1.0.2-1.el9.x86_64.rpm
 ```
 
 ## Release Checklist
@@ -160,8 +156,8 @@ rpm -qlp sendit-cli-1.0.1-1.el9.x86_64.rpm
 - [ ] Rebuild all packages following steps above
 - [ ] Verify executable paths in each package
 - [ ] Test install on each platform if possible
-- [ ] Create git tag: `git tag v1.0.1`
-- [ ] Push tag: `git push origin v1.0.1`
+- [ ] Create git tag: `git tag v1.0.2`
+- [ ] Push tag: `git push origin v1.0.2`
 - [ ] Create GitHub release
 - [ ] Upload all packages to release
 - [ ] Update README.md with new version numbers
@@ -172,6 +168,6 @@ rpm -qlp sendit-cli-1.0.1-1.el9.x86_64.rpm
 **Cause**: Executable has `require_relative '../lib/scli'` instead of absolute path
 **Fix**: Update `pkg/usr/local/bin/scli` with absolute paths before building
 
-### Issue: RPM build fails with "cd: sendit-cli-1.0.1-linux-x86_64: No such file or directory"
+### Issue: RPM build fails with "cd: sendit-cli-1.0.2-linux-x86_64: No such file or directory"
 **Cause**: Tarball doesn't extract to expected directory name
 **Fix**: Use `%setup -q -c` in spec file instead of `%setup -q -n dirname`
