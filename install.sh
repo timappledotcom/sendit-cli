@@ -34,17 +34,7 @@ sudo sed -i "s|require_relative '../lib/scli'|require '/usr/local/lib/scli/scli'
 
 # Install gem dependencies
 echo "Installing dependencies..."
-cd "$LIB_DIR"
-cat > Gemfile << 'EOF'
-source 'https://rubygems.org'
-gem 'tty-prompt', '~> 0.23'
-gem 'tty-spinner', '~> 0.9'
-gem 'tty-box', '~> 0.7'
-gem 'oauth', '~> 1.1'
-gem 'typhoeus', '~> 1.4'
-EOF
-
-sudo bundle install --system
+sudo gem install --no-document tty-prompt tty-spinner tty-box oauth typhoeus
 
 echo "Installation complete!"
 echo "Run 'scli \"Your message\"' to get started."
