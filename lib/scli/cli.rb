@@ -34,8 +34,9 @@ module SCLI
       # Initialize service clients
       microblog = MicroBlog.new(config['microblog'])
       x_client = X.new(config['x'])
+      nostr_client = Nostr.new(config['nostr'])
 
-      puts "\n📤 Posting to Micro.blog and X...\n"
+      puts "\n📤 Posting to Micro.blog, X, and Nostr...\n"
 
       results = []
       
@@ -63,13 +64,26 @@ module SCLI
         puts "   Error: #{result2[:error]}"
       end
 
+      # Post to Nostr
+      spinner3 = TTY::Spinner.new("[:spinner] Posting to Nostr...", format: :dots)
+      spinner3.auto_spin
+      result3 = nostr_client.post(message)
+      results << result3
+      if result3[:success]
+        spinner3.success("✅")
+        puts "   #{result3[:details]}" if result3[:details]
+      else
+        spinner3.error("❌")
+        puts "   Error: #{result3[:error]}"
+      end
+
       # Summary
       puts ""
       successes = results.count { |r| r[:success] }
       
       if successes == results.length
         box = TTY::Box.frame(
-          "🎉 Successfully posted to both services!",
+          "🎉 Successfully posted to all services!",
           padding: 1,
           border: :thick,
           style: {

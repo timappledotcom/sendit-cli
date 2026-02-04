@@ -1,6 +1,6 @@
 # SendIt CLI
 
-A Ruby CLI tool for posting to Micro.blog and X (Twitter) simultaneously.
+A Ruby CLI tool for posting to Micro.blog, X (Twitter), and Nostr simultaneously.
 
 ## Installation
 
@@ -63,6 +63,7 @@ On first run, SendIt will prompt you for credentials:
 You'll be asked for:
 - **Micro.blog**: Access token (generate at Settings > App tokens)
 - **X (Twitter)**: API key, API secret, access token, access token secret
+- **Nostr**: Authentication method (nsec key or Pleb Signer) and relay URLs
 
 Credentials are stored securely in `~/.scli/config.yml` with 0600 permissions.
 
@@ -74,16 +75,18 @@ Simply run:
 scli "Your message here"
 ```
 
-The message will be posted to both Micro.blog and X simultaneously.
+The message will be posted to Micro.blog, X, and Nostr simultaneously.
 
 ### Features
 
 - Interactive credential setup on first run
-- Simultaneous posting to both services
+- Simultaneous posting to three services (Micro.blog, X, Nostr)
+- Multiple Nostr authentication methods (nsec or Pleb Signer)
 - Real-time progress spinners
 - Beautiful success/error messages
 - 280 character limit validation
 - Secure credential storage
+- Multi-relay Nostr support
 
 ## Configuration
 
@@ -97,6 +100,17 @@ x:
   api_secret: your_api_secret
   access_token: your_access_token
   access_secret: your_access_token_secret
+nostr:
+  # Option 1: Use nsec key
+  nsec: nsec1...
+  # Option 2: Use Pleb Signer
+  use_pleb_signer: true
+  # Relay configuration
+  relays:
+    - wss://relay.pleb.one
+    - wss://relay.primal.net
+    - wss://relay.damus.io
+    - wss://relay.snort.social
 ```
 
 To reconfigure, delete `~/.scli/config.yml` and run the command again.
@@ -113,6 +127,26 @@ To reconfigure, delete `~/.scli/config.yml` and run the command again.
 2. Create a new project and app
 3. Set permissions to "Read and Write"
 4. Generate API keys and access tokens
+
+### Nostr
+
+**Option 1: nsec Key**
+1. If you already have a Nostr account, use your existing nsec key
+2. Or generate a new keypair using any Nostr client (e.g., Damus, Amethyst, Snort)
+3. Your nsec key starts with `nsec1` and should be kept secure
+
+**Option 2: Pleb Signer (Recommended for security)**
+1. Install Pleb Signer from [GitHub](https://github.com/PlebOne/Pleb_Signer)
+2. Start Pleb Signer: `pleb-signer`
+3. Create or import your Nostr key in Pleb Signer
+4. Unlock the signer when prompted by SendIt
+5. Your keys never leave the secure vault
+
+**Default Relays:**
+- wss://relay.pleb.one
+- wss://relay.primal.net
+- wss://relay.damus.io
+- wss://relay.snort.social
 
 ## Examples
 
@@ -139,11 +173,17 @@ scli Check out my new blog post about Ruby!
 - tty-box: Formatted output boxes
 - oauth: OAuth authentication for X API
 - typhoeus: HTTP client
+- nostr: Nostr protocol implementation
+- ruby-dbus: D-Bus communication (for Pleb Signer)
 
 ## API Documentation
 
 - [Micro.blog Micropub API](https://help.micro.blog/t/micropub-api/95)
 - [X API v2 Documentation](https://developer.x.com/en/docs/twitter-api)
+- [Nostr Protocol](https://nostr.how/en/the-protocol)
+- [NIP-19: bech32-encoded entities](https://github.com/nostr-protocol/nips/blob/master/19.md)
+- [NIP-55: Android Signer Application](https://github.com/nostr-protocol/nips/blob/master/55.md)
+- [Pleb Signer GitHub](https://github.com/PlebOne/Pleb_Signer)
 
 ## License
 

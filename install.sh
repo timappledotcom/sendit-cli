@@ -34,7 +34,7 @@ sudo sed -i "s|require_relative '../lib/scli'|require '/usr/local/lib/scli/scli'
 
 # Install gem dependencies
 echo "Installing dependencies..."
-sudo gem install --no-document tty-prompt tty-spinner tty-box oauth typhoeus
+sudo gem install --no-document tty-prompt tty-spinner tty-box oauth typhoeus nostr ruby-dbus
 
 echo "Installation complete!"
 echo "Run 'scli \"Your message\"' to get started."
