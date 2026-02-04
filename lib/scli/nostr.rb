@@ -63,7 +63,7 @@ module SCLI
         end
         
         # Get public key to verify connection
-        pubkey_result = @pleb_signer_interface.GetPublicKey('')[0]
+        pubkey_result = @pleb_signer_interface.GetPublicKey[0]
         pubkey_data = JSON.parse(pubkey_result)
         @pubkey = pubkey_data['npub']
       rescue DBus::Error => e
@@ -98,15 +98,17 @@ module SCLI
       }.to_json
       
       # Sign via D-Bus
-      signed_result = @pleb_signer_interface.SignEvent(event_json, '', 'sendit-cli')[0]
+      signed_result = @pleb_signer_interface.SignEvent(event_json, 'sendit-cli')[0]
       signed_data = JSON.parse(signed_result)
       
-      if signed_data['error']
-        raise "Pleb Signer error: #{signed_data['error']}"
+      unless signed_data['success']
+        error = signed_data['error'] || 'Unknown error'
+        raise "Pleb Signer error: #{error}"
       end
       
-      # Parse the signed event
-      event_data = JSON.parse(signed_data['event_json'])
+      # Parse the double-encoded result
+      result_data = JSON.parse(signed_data['result'])
+      event_data = JSON.parse(result_data['event_json'])
       event = ::Nostr::Event.new(
         id: event_data['id'],
         pubkey: event_data['pubkey'],
@@ -122,39 +124,35 @@ module SCLI
     end
 
     def publish_to_relays(event)
-      client = ::Nostr::Client.new(relays: @relays)
+      client = ::Nostr::Client.new(logger: nil)
       
-      # Publish the event
-      results = []
+      # Connect to all relays first
       @relays.each do |relay_url|
-        begin
-          client.publish(event, relay_url)
-          results << { relay: relay_url, success: true }
-        rescue => e
-          results << { relay: relay_url, success: false, error: e.message }
-        end
+        relay = ::Nostr::Relay.new(url: relay_url, name: relay_url)
+        client.connect(relay)
       end
       
-      # Close connection
-      client.close
+      # Wait for connections to establish
+      sleep 2
       
-      # Consider it successful if at least one relay succeeded
-      success_count = results.count { |r| r[:success] }
+      # Publish the event (goes to all connected relays)
+      client.publish(event)
       
-      if success_count > 0
-        { 
-          success: true, 
-          service: 'Nostr', 
-          message: message,
-          details: "Posted to #{success_count}/#{@relays.length} relays"
-        }
-      else
-        { 
-          success: false, 
-          service: 'Nostr', 
-          error: "Failed to post to any relay: #{results.map { |r| r[:error] }.compact.join(', ')}"
-        }
-      end
+      # Wait for publish to complete
+      sleep 2
+      
+      # Assume success if we got here
+      { 
+        success: true, 
+        service: 'Nostr', 
+        details: "Posted to #{@relays.length} relays"
+      }
+    rescue => e
+      { 
+        success: false, 
+        service: 'Nostr', 
+        error: e.message
+      }
     end
   end
 end

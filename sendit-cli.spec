@@ -1,11 +1,11 @@
 Name:           sendit-cli
-Version:        1.1.0
+Version:        1.1.1
 Release:        1%{?dist}
 Summary:        CLI tool for posting to Micro.blog, X, and Nostr simultaneously
 
 License:        MIT
 URL:            https://github.com/timappledotcom/sendit-cli
-Source0:        sendit-cli-1.1.0-linux-x86_64.tar.gz
+Source0:        sendit-cli-1.1.1-linux-x86_64.tar.gz
 
 Requires:       ruby >= 2.7
 

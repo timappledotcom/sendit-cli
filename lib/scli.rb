@@ -5,5 +5,5 @@ require_relative 'scli/nostr'
 require_relative 'scli/cli'
 
 module SCLI
-  VERSION = '1.1.0'
+  VERSION = '1.1.1'
 end
